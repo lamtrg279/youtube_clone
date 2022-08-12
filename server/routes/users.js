@@ -18,19 +18,19 @@ router.get("/");
 router.put("/:id", verifyToken, update);
 
 //Delete user
-router.delete("/:id", deleteUser);
+router.delete("/:id", verifyToken, deleteUser);
 
 //Get user
 router.get("/find/:id", getUser);
 
 //Subscribe to user
-router.put("/sub/:id", subscribe);
+router.put("/sub/:id", verifyToken, subscribe);
 
 //Unsubscribe to user
-router.put("/unsub/:id", unsubscribe);
+router.put("/unsub/:id", verifyToken, unsubscribe);
 
 //Like a video
-router.put("/like/:videoid", like);
+router.put("/like/:videoid", verifyToken, like);
 
 //Dislike a video
 router.put("/dislike/:videoid", dislike);
