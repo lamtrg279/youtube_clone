@@ -46,7 +46,7 @@ export const getUser = async (req, res, next) => {
 export const subscribe = async (req, res, next) => {
   // Find the x user, push the params id channel to x user's string of subscribedUser
   try {
-    await User.findById(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
       $push: { subscribedUsers: req.params.id }
     });
     //Increament the subscribers of the params id channel
@@ -61,7 +61,7 @@ export const subscribe = async (req, res, next) => {
 
 export const unsubscribe = async (req, res, next) => {
   try {
-    await User.findById(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
       $pull: { subscribedUsers: req.params.id }
     });
     //Increament the subscribers of the params id channel

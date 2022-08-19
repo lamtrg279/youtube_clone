@@ -12,8 +12,6 @@ import { verifyToken } from "../verifyToken.js";
 
 const router = express.Router();
 
-router.get("/");
-
 //Update user
 router.put("/:id", verifyToken, update);
 

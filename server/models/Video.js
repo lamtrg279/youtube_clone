@@ -4,8 +4,7 @@ const VideoSchema = new mongoose.Schema(
   {
     userId: {
       type: String,
-      required: true,
-      unique: true
+      required: true
     },
     title: {
       type: String,
