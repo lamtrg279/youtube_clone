@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
-import { Menu, Navbar, Card } from "./components";
+import { Menu, Navbar } from "./components";
 import { darkTheme, lightTheme } from "./utils/Theme.js";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Home, Video } from "./pages";
+import { Home, Video, SignIn } from "./pages";
 
 const Container = styled.div`
   display: flex;
@@ -30,6 +30,7 @@ function App() {
               <Routes>
                 <Route path='/'>
                   <Route index element={<Home />} />
+                  <Route path='signin' element={<SignIn />} />
                   <Route path='video'>
                     <Route path=':id' element={<Video />} />
                   </Route>

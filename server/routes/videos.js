@@ -7,7 +7,9 @@ import {
   updateVideo,
   randomVideo,
   addView,
-  sub
+  sub,
+  tags,
+  search
 } from "../controller/video.js";
 
 const router = express.Router();
@@ -34,5 +36,11 @@ router.get("/random", randomVideo);
 
 //Get video from subscribed channels
 router.get("/sub", verifyToken, sub);
+
+//Get video from tags
+router.get("/tags", tags);
+
+//Get video from search
+router.get("/search", search);
 
 export default router;
