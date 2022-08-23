@@ -26,6 +26,7 @@ router.delete("/:id", verifyToken);
 //Get a video
 router.get("/find/:id", getVideo);
 
+//View a video
 router.put("/view/:id", addView);
 
 //Get trending video

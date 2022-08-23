@@ -2,17 +2,19 @@ import Video from "../models/Video.js";
 import User from "../models/User.js";
 import { createError } from "./../error.js";
 
+//* Add video
 export const addVideo = async (req, res, next) => {
   // Don't need to include id in json payload when calling request
   const newVideo = new Video({ userId: req.user.id, ...req.body });
   try {
-    await newVideo.save();
-    res.status(200).json(newVideo);
+    const savedVideo = await newVideo.save();
+    res.status(200).json(savedVideo);
   } catch (error) {
     next(error);
   }
 };
 
+//* Update video
 export const updateVideo = async (req, res, next) => {
   try {
     const video = await Video.findByIdAndUpdate(req.params.id);
@@ -34,6 +36,7 @@ export const updateVideo = async (req, res, next) => {
   }
 };
 
+//* Delete video
 export const deleteVideo = async (req, res, next) => {
   try {
     const video = await Video.findByIdAndUpdate(req.params.id);
@@ -49,6 +52,7 @@ export const deleteVideo = async (req, res, next) => {
   }
 };
 
+//* Get video by id
 export const getVideo = async (req, res, next) => {
   try {
     const video = await Video.findById(req.params.id);
@@ -58,6 +62,7 @@ export const getVideo = async (req, res, next) => {
   }
 };
 
+//* Get random video
 export const randomVideo = async (req, res, next) => {
   try {
     const video = await Video.aggregate([{ $sample: { size: 40 } }]);
@@ -67,6 +72,7 @@ export const randomVideo = async (req, res, next) => {
   }
 };
 
+//* Get video by view count
 export const trendVideo = async (req, res, next) => {
   try {
     const videos = await Video.find().sort({ views: -1 });
@@ -76,6 +82,7 @@ export const trendVideo = async (req, res, next) => {
   }
 };
 
+//* Get video from subscribed channels
 export const sub = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id);
@@ -93,6 +100,7 @@ export const sub = async (req, res, next) => {
   }
 };
 
+//* Get videos by tags
 export const tags = async (req, res, next) => {
   const tags = req.query.tags.split(",");
   try {
@@ -103,6 +111,7 @@ export const tags = async (req, res, next) => {
   }
 };
 
+//* Search video
 export const search = async (req, res, next) => {
   const query = req.query.q;
   try {
@@ -115,6 +124,7 @@ export const search = async (req, res, next) => {
   }
 };
 
+//* Add video
 export const addView = async (req, res, next) => {
   try {
     await Video.findByIdAndUpdate(req.params.id, {

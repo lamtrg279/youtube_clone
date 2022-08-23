@@ -31,6 +31,6 @@ router.put("/unsub/:id", verifyToken, unsubscribe);
 router.put("/like/:videoid", verifyToken, like);
 
 //Dislike a video
-router.put("/dislike/:videoid", dislike);
+router.put("/dislike/:videoid", verifyToken, dislike);
 
 export default router;
