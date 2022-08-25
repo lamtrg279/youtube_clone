@@ -1,6 +1,8 @@
-import React from "react";
 import styled from "styled-components";
+import { format } from "timeago.js";
 import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Container = styled.div`
   width: ${(props) => props.type !== "sm" && "360px"};
@@ -50,23 +52,29 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = ({ type }) => {
+const Card = ({ type, video }) => {
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(`/users/find/${video.userId}`);
+      setUser(res.data);
+    };
+    fetchChannel();
+  }, [video.userId]);
+
   return (
-    <Link to='/video/test' style={{ textDecoration: "none" }}>
+    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <Container type={type}>
-        <Image
-          type={type}
-          src='https://i.ytimg.com/vi/TOB2vzPfxNA/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLBOzZUcCPdmIgwGTaY56IW1kY53fA'
-        />
+        <Image type={type} src={video.imgUrl} />
         <Details type={type}>
-          <ChannelImage
-            type={type}
-            src='https://yt3.ggpht.com/IJ5VDWfTDpbTa21o7Q9eDQYQBerRakTYHcnnZczHcaDo58hcw36AnB0_NQtfzUdQjrs7oNlaNG0=s68-c-k-c0x00ffffff-no-rj'
-          />
+          <ChannelImage type={type} src={user.img} />
           <Texts>
-            <Title>The Michael Scott Redemption Tour - The Office US</Title>
-            <ChannelName>The Office</ChannelName>
-            <Info>17k views · 2 hours ago</Info>
+            <Title>{video.title}</Title>
+            <ChannelName>{user.name}</ChannelName>
+            <Info>
+              {video.views} views · {format(video.createdAt)}
+            </Info>
           </Texts>
         </Details>
       </Container>
