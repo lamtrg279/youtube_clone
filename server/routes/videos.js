@@ -18,7 +18,7 @@ const router = express.Router();
 router.post("/", verifyToken, addVideo);
 
 //Update a video
-router.put(":id/", verifyToken, updateVideo);
+router.put("/:id", verifyToken, updateVideo);
 
 //Delete a video
 router.delete("/:id", verifyToken);
