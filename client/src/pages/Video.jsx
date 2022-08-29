@@ -1,11 +1,19 @@
-import React from "react";
-import { Comments } from "../components";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { Comments } from "../components";
+import axios from "axios";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Card from "./../components/Card";
+import { fetchSuccess, like, dislike } from "../redux/videoSlice";
+import { subscription } from "../redux/userSlice";
+import { format } from "timeago.js";
 
 const Container = styled.div`
   display: flex;
@@ -105,72 +113,112 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
+`;
+
 const Video = () => {
+  const { currentUser } = useSelector((state) => state.user);
+  const { currentVideo } = useSelector((state) => state.video);
+  const dispatch = useDispatch();
+
+  const path = useLocation().pathname.split("/")[2];
+
+  const [channel, setChannel] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(`/videos/find/${path}`);
+        const channelRes = await axios.get(
+          `/users/find/${videoRes.data.userId}`
+        );
+        setChannel(channelRes.data);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (err) {}
+    };
+    fetchData();
+  }, [path, dispatch]);
+
+  const handleLike = async () => {
+    await axios.put(`/users/like/${currentVideo._id}`);
+    dispatch(like(currentUser._id));
+  };
+
+  const handleDislike = async () => {
+    await axios.put(`/users/dislike/${currentVideo._id}`);
+    dispatch(dislike(currentUser._id));
+  };
+
+  const handleSubscribe = async () => {
+    currentUser.subscribedUsers.includes(channel._id)
+      ? await axios.put(`/users/unsub/${channel._id}`)
+      : await axios.put(`/users/sub/${channel._id}`);
+    dispatch(subscription(channel._id));
+  };
+
   return (
     <Container>
       <Content>
         <VideoWrapper>
-          <iframe
-            width='100%'
-            height='720'
-            title='Youtube video'
-            allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-pciture'
-            src='https://www.youtube.com/embed/kMBnvz-dEXw'
-            frameborder='0'
-            allowFullScreen
-          ></iframe>
+          <VideoFrame src={currentVideo.videoUrl}></VideoFrame>
         </VideoWrapper>
-        <Title>
-          How '1917' Was Filmed To Look Like One Shot | Movies Insider
-        </Title>
+        <Title>{currentVideo.title}</Title>
         <Details>
-          <Info>15,287,319 views · Jan 9, 2020</Info>
+          <Info>
+            {currentVideo.views} views • {format(currentVideo.createdAt)}
+          </Info>
           <Buttons>
-            <Button>
-              <ThumbUpOutlinedIcon />
-              5.9K
+            <Button onClick={handleLike}>
+              {currentVideo.likes?.includes(currentUser?._id) ? (
+                <ThumbUpIcon />
+              ) : (
+                <ThumbUpOutlinedIcon />
+              )}{" "}
+              {currentVideo.likes?.length}
             </Button>
-            <Button>
-              <ThumbDownOffAltOutlinedIcon />
+            <Button onClick={handleDislike}>
+              {currentVideo.dislikes?.includes(currentUser?._id) ? (
+                <ThumbDownIcon />
+              ) : (
+                <ThumbDownOffAltOutlinedIcon />
+              )}{" "}
               Dislike
             </Button>
             <Button>
-              <ReplyOutlinedIcon />
-              Share
+              <ReplyOutlinedIcon /> Share
             </Button>
             <Button>
-              <AddTaskOutlinedIcon />
-              Save
+              <AddTaskOutlinedIcon /> Save
             </Button>
           </Buttons>
         </Details>
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src='https://yt3.ggpht.com/ytc/AMLnZu9HLp8cv9c4hHHusfZisSfkNhN0la8Q1C671wGOEA=s48-c-k-c0x00ffffff-no-rj' />
+            <Image src={channel.img} />
             <ChannelDetail>
-              <ChannelName>Insider</ChannelName>
-              <ChannelCounter>7.75M subscribers</ChannelCounter>
-              <Description>
-                Golden Globe-winning "1917" is a serious Oscar contender. It
-                stars George MacKay, Dean-Charles Chapman, Colin Firth, and
-                Benedict Cumberbatch and was filmed to look like one continuous
-                shot. Cinematographer Roger Deakins explains how he and director
-                Sam Mendes did it, from digging up ...
-              </Description>
+              <ChannelName>{channel.name}</ChannelName>
+              <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
+              <Description>{currentVideo.desc}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>SUBSCRIBE</Subscribe>
+          <Subscribe onClick={handleSubscribe}>
+            {currentUser.subscribedUsers?.includes(channel._id)
+              ? "SUBSCRIBED"
+              : "SUBSCRIBE"}
+          </Subscribe>
         </Channel>
-        <Comments />
+        <Comments videoId={currentVideo._id} />
       </Content>
-      <Recommendation>
+      {/* <Recommendation>
         <Card type='sm' />
         <Card type='sm' />
         <Card type='sm' />
         <Card type='sm' />
         <Card type='sm' />
-      </Recommendation>
+      </Recommendation> */}
     </Container>
   );
 };

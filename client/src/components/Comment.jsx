@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 const Container = styled.div`
   display: flex;
@@ -35,19 +36,25 @@ const Text = styled.span`
   font-size: 14px;
 `;
 
-const Comment = () => {
+const Comment = ({ comment }) => {
+  const [channel, setChannel] = useState({});
+
+  useEffect(() => {
+    const fetchComment = async () => {
+      const res = await axios.get(`/users/find/${comment.userId}`);
+      setChannel(res.data);
+    };
+    fetchComment();
+  }, [comment.userId]);
+
   return (
     <Container>
-      <Avatar src='https://yt3.ggpht.com/5oUY3tashyxfqsjO5SGhjT4dus8FkN9CsAHwXWISFrdPYii1FudD4ICtLfuCw6-THJsJbgoY=s176-c-k-c0x00ffffff-no-rj-mo' />
+      <Avatar src={channel.img} />
       <Details>
         <Name>
-          PewDiePie<Date>2 days ago</Date>
+          {channel.name} <Date>1 day ago</Date>
         </Name>
-        <Text>
-          I really connected with this video. Talking about the challenges you
-          overcame really inspired me to want to try better and be better. Keep
-          doing you pewds wish you all the best👊
-        </Text>
+        <Text>{comment.desc}</Text>
       </Details>
     </Container>
   );

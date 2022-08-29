@@ -1,6 +1,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import userReducer from "./userSlice.js";
-import videoReducer from "./videoSlice.js";
+import userReducer from "./userSlice";
+import videoReducer from "./videoSlice";
 import {
   persistStore,
   persistReducer,
@@ -12,6 +12,7 @@ import {
   REGISTER
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import { PersistGate } from "redux-persist/integration/react";
 
 const persistConfig = {
   key: "root",
@@ -28,7 +29,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
       }
     })
 });
