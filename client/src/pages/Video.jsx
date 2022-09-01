@@ -11,6 +11,7 @@ import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutl
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import Card from "./../components/Card";
+import Recommendation from "../components/Recommendation";
 import { fetchSuccess, like, dislike } from "../redux/videoSlice";
 import { subscription } from "../redux/userSlice";
 import { format } from "timeago.js";
@@ -22,10 +23,6 @@ const Container = styled.div`
 
 const Content = styled.div`
   flex: 5;
-`;
-
-const Recommendation = styled.div`
-  flex: 2;
 `;
 
 const VideoWrapper = styled.div``;
@@ -120,8 +117,10 @@ const VideoFrame = styled.video`
 `;
 
 const Video = () => {
-  const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
+  const { currentUser } = useSelector((state) => state.user);
+  // const currentUser = useSelector((state) => state.user);
+  // const currentVideo = useSelector((state) => state.video);
   const dispatch = useDispatch();
 
   const path = useLocation().pathname.split("/")[2];
@@ -162,7 +161,7 @@ const Video = () => {
     <Container>
       <Content>
         <VideoWrapper>
-          <VideoFrame src={currentVideo.videoUrl}></VideoFrame>
+          <VideoFrame src={currentVideo.videoUrl} controls></VideoFrame>
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
         <Details>
@@ -212,13 +211,7 @@ const Video = () => {
         </Channel>
         <Comments videoId={currentVideo._id} />
       </Content>
-      {/* <Recommendation>
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-        <Card type='sm' />
-      </Recommendation> */}
+      <Recommendation tags={currentVideo.tags} />
     </Container>
   );
 };

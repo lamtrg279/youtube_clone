@@ -3,7 +3,7 @@ import styled, { ThemeProvider } from "styled-components";
 import { Menu, Navbar } from "./components";
 import { darkTheme, lightTheme } from "./utils/Theme.js";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Home, Video, SignIn } from "./pages";
+import { Home, Video, SignIn, Search } from "./pages";
 
 const Container = styled.div`
   display: flex;
@@ -32,6 +32,7 @@ function App() {
                   <Route index element={<Home type='random' />} />
                   <Route path='trends' element={<Home type='trending' />} />
                   <Route path='subscriptions' element={<Home type='sub' />} />
+                  <Route path='search' element={<Search />} />
                   <Route path='signin' element={<SignIn />} />
                   <Route path='video'>
                     <Route path=':id' element={<Video />} />

@@ -37,7 +37,6 @@ const Comments = ({ videoId }) => {
       try {
         const res = await axios.get(`/comments/${videoId}`);
         setComments(res.data);
-        console.log(comments);
       } catch (error) {}
     };
     fetchComments();
@@ -46,7 +45,7 @@ const Comments = ({ videoId }) => {
   return (
     <Container>
       <NewComment>
-        <Avatar src={currentUser.imf} />
+        <Avatar src={currentUser.img} />
         <Input placeholder='Add a comment...'></Input>
       </NewComment>
       {comments.map((comment) => (
