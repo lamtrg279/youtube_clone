@@ -6,7 +6,8 @@ The entire documentation can be found at this link, many commands can be used in
 
 https://documenter.getpostman.com/view/15890099/2s7YYsdQAG
 
-*Note* : 
+*Note*: 
 1. The SignUp section is not available in the UI, user must create new account using Postman. 
-2. Only "Home", "Explore", "Subscription" are fully implemented in the side. "Home" returns random videos, "Explore" returns video by views, "Subscription" returns videos that are from subscribed channels
+2. User must login before viewing video
+3. Only "Home", "Explore", "Subscription" are fully implemented in the side. "Home" returns random videos, "Explore" returns video by views, "Subscription" returns videos that are from subscribed channels
 
