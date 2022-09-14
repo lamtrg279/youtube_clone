@@ -11,3 +11,7 @@ https://documenter.getpostman.com/view/15890099/2s7YYsdQAG
 2. User must login before viewing video
 3. Only "Home", "Explore", "Subscription" are fully implemented in the side. "Home" returns random videos, "Explore" returns video by views, "Subscription" returns videos that are from subscribed channels
 
+# Demo
+
+https://user-images.githubusercontent.com/76791917/190263857-b1e0cf89-26e7-4a9b-9024-3c9d5b30ca4a.mp4
+
